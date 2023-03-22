@@ -16,6 +16,9 @@ public class GuardAI : MonoBehaviour
     private bool _reverse = false;
     private bool _targetReached = false;
 
+    public bool coinTossed;
+    public Vector3 coinPosition;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,7 +40,8 @@ public class GuardAI : MonoBehaviour
     {
         // if waypoints exsist (count) && waypoints[currentTarget] != null
         // set destination to current target
-        if (waypoints.Count > 0 && waypoints.Count > 1 && waypoints[_currentTarget] != null)
+        if (waypoints.Count > 0 && waypoints.Count > 1 && waypoints[_currentTarget] != null 
+            && coinTossed == false)
         {
             _agent.SetDestination(waypoints[_currentTarget].position);
             var distance = Vector3.Distance(transform.position, waypoints[_currentTarget].position);
@@ -57,6 +61,14 @@ public class GuardAI : MonoBehaviour
                 StartCoroutine(WaitBeforeMoving());
             } 
 
+        } 
+        else
+        {
+            var distance = Vector3.Distance(transform.position, coinPosition);
+            if (distance < 4)
+            {
+                _animator.SetBool("Walk", false);
+            }
         }
     }
 
